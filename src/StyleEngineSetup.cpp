@@ -30,6 +30,7 @@ SUPPRESS_WARNINGS
 #include <QtCore/QDir>
 #include <QtCore/QUrl>
 #include <QtQml/QQmlEngine>
+#include <QtQml/QQmlFile>
 #include <QtQml/qqml.h>
 RESTORE_WARNINGS
 
@@ -195,7 +196,7 @@ void StyleEngineSetup::SourceUrl::set(const QUrl& url,
                                       QFileSystemWatcher& watcher)
 {
   if (mSourceUrl.isLocalFile()) {
-    auto stylePath = qmlEngine(pParent)->baseUrl().resolved(mSourceUrl).toLocalFile();
+    auto stylePath = QQmlFile::urlToLocalFileOrQrc(mSourceUrl);
     if (!stylePath.isEmpty() && QFile(stylePath).exists()) {
       watcher.removePath(stylePath);
     }
@@ -204,7 +205,7 @@ void StyleEngineSetup::SourceUrl::set(const QUrl& url,
   mSourceUrl = url;
 
   if (mSourceUrl.isLocalFile()) {
-    auto stylePath = qmlEngine(pParent)->baseUrl().resolved(mSourceUrl).toLocalFile();
+    auto stylePath = QQmlFile::urlToLocalFileOrQrc(mSourceUrl);
     if (!stylePath.isEmpty() && QFile(stylePath).exists()) {
       watcher.addPath(stylePath);
     }

@@ -136,7 +136,7 @@ std::string StyleEngine::describeMatchedPath(const UiItemPath& path) const
 
 void StyleEngine::resolveFontFaceDecl(const StyleSheet& styleSheet)
 {
-  for (auto ffd : styleSheet.fontfaces) {
+  for (const auto& ffd : styleSheet.fontfaces) {
     QUrl fontFaceUrl = resolveResourceUrl(
       mStyleSheetSourceUrl.url(), QUrl(QString::fromStdString(ffd.url)));
     QString fontFaceFile = QQmlFile::urlToLocalFileOrQrc(fontFaceUrl);
@@ -173,7 +173,7 @@ void StyleEngine::resolveFontFaceDecl(const StyleSheet& styleSheet)
 StyleSheet StyleEngine::loadStyleSheet(const QUrl& srcurl)
 {
   if (srcurl.isLocalFile() || srcurl.isRelative()) {
-    QString styleFilePath = mBaseUrl.resolved(srcurl).toLocalFile();
+    QString styleFilePath = QQmlFile::urlToLocalFileOrQrc(srcurl);
 
     if (styleFilePath.isEmpty() || !QFile::exists(styleFilePath)) {
       styleSheetsLogError() << "Style '" << styleFilePath.toStdString() << "' not found";

@@ -30,6 +30,7 @@ SUPPRESS_WARNINGS
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QRegularExpression>
+#include <QtQml/QQmlFile>
 RESTORE_WARNINGS
 
 #include <vector>
@@ -45,10 +46,12 @@ QUrl searchForResourceSearchPath(const QUrl& baseUrl,
                                  const QStringList& searchPath)
 {
   if (url.isRelative()) {
+    if (QQmlFile::urlToLocalFileOrQrc(baseUrl).startsWith(":/")) {
+      return url;
+    }
     if (!baseUrl.isLocalFile()) {
       return baseUrl.resolved(url);
     }
-
     auto path = url.path();
     if (!path.startsWith("/")) {
       auto resolvedUrl = baseUrl.resolved(url);

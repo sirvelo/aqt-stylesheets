@@ -68,11 +68,11 @@ void StylesDirWatcher::setStylePath(const QUrl& url)
     }
 
     if (pEngine) {
-      mStylePath = pEngine->baseUrl().resolved(mStylePathUrl).toLocalFile();
+      mStylePath = QQmlFile::urlToLocalFileOrQrc(mStylePathUrl);
 
-      if (mFsWatcher.addPath(mStylePath)) {
-        updateStyleFiles();
-      }
+      mFsWatcher.addPath(mStylePath);
+
+      updateStyleFiles();
     }
 
     Q_EMIT stylePathChanged(url);
@@ -87,7 +87,7 @@ QVariantList StylesDirWatcher::fileExtensions() const
 void StylesDirWatcher::setFileExtensions(const QVariantList& fileExtensions)
 {
   QStringList styleFilters;
-  for (auto ext : fileExtensions) {
+  for (const auto& ext : fileExtensions) {
     styleFilters.push_back(ext.toString());
   }
 
@@ -110,7 +110,7 @@ QVariantList StylesDirWatcher::availableStyleSheetNames() const
 {
   QVariantList result;
 
-  for (auto str : mStyleSheetFiles) {
+  for (const auto& str : mStyleSheetFiles) {
     result.append(str);
   }
 
@@ -122,7 +122,7 @@ QVariantList StylesDirWatcher::availableStyles() const
   QVariantList result;
 
   QDir styleDir(mStylePath);
-  for (auto str : mStyleSheetFiles) {
+  for (const auto& str : mStyleSheetFiles) {
     result.append(QUrl::fromLocalFile(styleDir.absoluteFilePath(str)));
   }
 

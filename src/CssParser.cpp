@@ -34,21 +34,22 @@ RESTORE_WARNINGS
 #include <ios>
 #include <sstream>
 
+#include <QFile>
+
 namespace
 {
 
 /*! @throw std::ios_base::failure for IO errors or if the file at @path
  *         could not be opened. */
-std::string loadFileIntoString(const std::string& path)
+std::string loadFileIntoString(const QString& path)
 {
-  std::stringstream result;
+  QFile file(path);
 
-  std::ifstream in(path.c_str(), std::ios::in | std::ios::binary);
-  in.exceptions(std::ifstream::failbit);
+  if ( file.open( QFile::ReadOnly ) ) {
+    return file.readAll().toStdString();
+  }
 
-  result << in.rdbuf();
-
-  return result.str();
+  return std::string();
 }
 
 } // anon namespace
@@ -227,7 +228,7 @@ StyleSheet parseString(const QString& data)
 
 StyleSheet parseStyleFile(const QString& path)
 {
-  return parseStdString(loadFileIntoString(path.toStdString()));
+  return parseStdString(loadFileIntoString(path));
 }
 
 } // namespace stylesheets

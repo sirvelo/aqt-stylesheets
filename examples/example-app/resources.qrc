@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file alias="main.qml">main.qml</file>
+    </qresource>
+    <qresource prefix="/css">
+        <file alias="dark.css">css/dark.css</file>
+        <file alias="default.css">css/default.css</file>
+        <file alias="style.css">css/style.css</file>
+    </qresource>
+    <qresource prefix="/qml/assets">
+        <file alias="bibimpab.png">assets/bibimpab.png</file>
+    </qresource>
+</RCC>
